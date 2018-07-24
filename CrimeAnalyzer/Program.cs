@@ -48,7 +48,7 @@ namespace CrimeAnalyzer
                         row++;                                                  //keeps track of which row is being read. First row of numerical data is 1
                         int[] values = StringToInt(line.Split(','),row);
                         LengthCheck(values.Length, numItemsInRow, row);
-                            
+
                         crimeStatsList.Add(new CrimeYear(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10]));
                         line = sr.ReadLine();
                     }
@@ -62,7 +62,7 @@ namespace CrimeAnalyzer
                 {
                     
                 }
-                return null;    //placeholder
+                return crimeStatsList;
 
             }
 
@@ -93,6 +93,8 @@ namespace CrimeAnalyzer
                     Console.ReadLine();
                     Environment.Exit(3);
                 }
+                i++;
+
             }
             return intArray;
         }
@@ -112,8 +114,9 @@ namespace CrimeAnalyzer
         static void PrintList(List<CrimeYear> crime)
         {
             foreach(var listItem in crime)
+
             {
-                Console.WriteLine("Year: {0}, Rape: {1}\n", listItem.year, listItem.rape);
+                Console.WriteLine("Year: {0}, Population: {1}, Murder{2}\n", listItem.year, listItem.population, listItem.murder);
             }
         }
 
