@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace CrimeAnalyzer
 {
@@ -16,6 +17,8 @@ namespace CrimeAnalyzer
                 Console.ReadLine();
                 Environment.Exit(1);
             }
+            string CSVFilename = args[0];
+            string ReportFilename = args[1];
 
 
         }
@@ -28,7 +31,44 @@ namespace CrimeAnalyzer
 
         static void ReadCSV(string filename)
         {
+            {
+                string content = "";
+                string line;
 
+
+                try
+                {
+                    StreamReader sr = new StreamReader(Filename);
+
+                    line = sr.ReadLine();
+                    while (line != null)
+                    {
+                        content += line;
+                        line = sr.ReadLine();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception: " + e.Message);   //display exceptions
+                }
+                finally
+                {
+
+                }
+                
+
+            }
+
+        }
+
+        static void fileCheck(string filename)
+        {
+            if (File.Exists(filename)) return;
+
+            Console.WriteLine("The file {0} does not exist. Exiting program.",filename);
+            Console.ReadLine();
+            Environment.Exit(2);
         }
     }
 }
