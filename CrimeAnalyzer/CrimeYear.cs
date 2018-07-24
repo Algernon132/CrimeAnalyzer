@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace CrimeAnalyzer
 {
-    class CrimeYear
+    public class CrimeYear
     {
-        int year;
-        int population;
-        int violent;
-        int murder;
-        int rape;
-        int robbery;
-        int aggravated;
-        int property;
-        int burglary;
-        int theft;
-        int mvt;    //motor vehicle theft
+        public int year;
+        public int population;
+        public int violent;
+        public int murder;
+        public int rape;
+        public int robbery;
+        public int aggravated;
+        public int property;
+        public int burglary;
+        public int theft;
+        public int mvt;    //motor vehicle theft
 
         public CrimeYear(int Year, int Population, int Violent, int Murder, int Rape, int Robbery, int Aggravated,
                          int Property, int Burglary, int Theft, int Mvt)
