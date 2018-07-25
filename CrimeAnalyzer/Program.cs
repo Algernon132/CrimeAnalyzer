@@ -18,13 +18,14 @@ namespace CrimeAnalyzer
                 Environment.Exit(1);
             }
             string CSVFilename = FileCheck(args[0]);
-            string reportFilename = FileCheck(args[1]);
+            string reportFilename = args[1];
 
             List<CrimeYear> crimeStatsList = ReadCSV(CSVFilename);
             
             string report = MakeReport(crimeStatsList);
 
             Console.WriteLine(report);
+            WriteFile(report, reportFilename);
             Console.ReadLine();
 
         }
@@ -67,7 +68,7 @@ namespace CrimeAnalyzer
         }
 
 
-        static string FileCheck(string filename)
+        static string FileCheck(string filename)    //check if file exists
         {
             if (File.Exists(filename)) return filename;
 
@@ -78,7 +79,7 @@ namespace CrimeAnalyzer
         }
 
 
-        static int[] StringToInt(string[] strArray, int row)
+        static int[] StringToInt(string[] strArray, int row)    //convert array of strings to array of integers
         {
             int[] intArray = new int[strArray.Length];                             //creates array of integers with same number of elements as array passed to this method
             int i = 0;
@@ -98,7 +99,7 @@ namespace CrimeAnalyzer
         }
 
 
-        static void LengthCheck(int itemsInList, int rowLength, int row)
+        static void LengthCheck(int itemsInList, int rowLength, int row)    //confirms that the number of data entries in a row is equal to the number of headers in the given file
         {
             if(itemsInList != rowLength)
             {
@@ -109,7 +110,7 @@ namespace CrimeAnalyzer
             }
         }
 
-        static string MakeReport(List<CrimeYear> crimeStatsList)
+        static string MakeReport(List<CrimeYear> crimeStatsList)    //takes list of crime stats and uses LINQ queries to generate a readable report
         {
             /*
              * Collect data from CSV list using LINQ. Will use this data to create report
@@ -142,7 +143,7 @@ namespace CrimeAnalyzer
             int minYear = years.Min();
             int maxYear = years.Max();
             int numYears = years.Count();
-            float violent2010PerCapita = violentIn2010.Sum() / popIn2010.First();
+            float violent2010PerCapita = (float)violentIn2010.Sum() / popIn2010.First();
             float avgMurder = murderPerYear.Sum() / numYears;
             float avgMurder94to97 = murder94to97.Sum() / murder94to97.Count();
             float avgMurder10to13 = murder10to13.Sum() / murder10to13.Count();
@@ -152,7 +153,7 @@ namespace CrimeAnalyzer
 
             int[] yrsOver500kArray = yrsRobberyOver500k.Cast<int>().ToArray();
             int[] numOver500kArray = numRobberyOver500k.Cast<int>().ToArray();
-            
+
 
             /*
              * Create report
@@ -179,6 +180,25 @@ namespace CrimeAnalyzer
 
         }
 
-        
+        static void WriteFile(string fileContent, string filename)
+        {
+            try
+            {
+                StreamWriter sw = new StreamWriter(filename); //Will save to current directory
+
+                sw.WriteLine(fileContent);
+
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not write file. Exception: " + e.Message);   //display exceptions
+            }
+            finally
+            {
+                Console.WriteLine("Report {0} was successfully written." , filename);
+            }
+        }
+
     }
 }
