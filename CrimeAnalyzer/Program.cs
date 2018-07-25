@@ -5,6 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+/*
+ * Charles Bruscato
+ * July 24, 2018
+ * Musser IT 2001 
+ * Final Project!
+ */
 namespace CrimeAnalyzer
 {
     class Program
@@ -164,8 +170,8 @@ namespace CrimeAnalyzer
             report += "Years murder is under 15000: ";
             foreach (var item in murdersUnder15k) report += item + " ";
             report += Environment.NewLine + Environment.NewLine;
-            report += "Years where robbery is greater than 500,000: ";
-            for (int i = 0; i < yrsOver500kArray.Length; i++) report += Environment.NewLine + "      Year: " + yrsOver500kArray[i] + " --> Robberies: " + numOver500kArray[i];
+            report += "  Years where robbery is greater than 500,000: ";
+            for (int i = 0; i < yrsOver500kArray.Length; i++) report += Environment.NewLine + "       Year: " + yrsOver500kArray[i] + " --> Robberies: " + numOver500kArray[i];
             report += Environment.NewLine + Environment.NewLine;
             report += "Violent crime per capita in 2010: " + violent2010PerCapita + Environment.NewLine;
             report += "Average murders per year from " + minYear + " to " + maxYear + ": " + avgMurder + Environment.NewLine;

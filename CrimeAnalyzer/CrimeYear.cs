@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CrimeAnalyzer
 {
     public class CrimeYear
-    {
+    {   
         public int year;
         public int population;
         public int violent;
