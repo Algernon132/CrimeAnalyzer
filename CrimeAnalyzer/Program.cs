@@ -20,8 +20,11 @@ namespace CrimeAnalyzer
             string CSVFilename = FileCheck(args[0]);
             string reportFilename = FileCheck(args[1]);
 
-            List<CrimeYear> crimeStatsLIst = ReadCSV(CSVFilename);
-            PrintList(crimeStatsLIst);
+            List<CrimeYear> crimeStatsList = ReadCSV(CSVFilename);
+            
+            string report = MakeReport(crimeStatsList);
+
+            Console.WriteLine(report);
             Console.ReadLine();
 
         }
@@ -58,12 +61,7 @@ namespace CrimeAnalyzer
                 {
                     Console.WriteLine("Exception: " + e.Message);                //display exceptions
                 }
-                finally
-                {
-                    
-                }
                 return crimeStatsList;
-
             }
 
         }
@@ -111,13 +109,74 @@ namespace CrimeAnalyzer
             }
         }
 
-        static void PrintList(List<CrimeYear> crime)
+        static string MakeReport(List<CrimeYear> crimeStatsList)
         {
-            foreach(var listItem in crime)
+            /*
+             * Collect data from CSV list using LINQ. Will use this data to create report
+             */
 
-            {
-                Console.WriteLine("Year: {0}, Population: {1}, Murder{2}\n", listItem.year, listItem.population, listItem.murder);
-            }
+            var years = from crimeStats in crimeStatsList select crimeStats.year;
+
+            var murdersUnder15k = from crimeStats in crimeStatsList where crimeStats.murder < 15000 select crimeStats.year;
+
+            var yrsRobberyOver500k = from crimeStats in crimeStatsList where crimeStats.robbery > 500000 select crimeStats.year;
+            var numRobberyOver500k = from crimeStats in crimeStatsList where crimeStats.robbery > 500000 select crimeStats.robbery;
+
+            var violentIn2010 = from crimeStats in crimeStatsList where crimeStats.year == 2010 select crimeStats.violent;
+            var popIn2010 = from crimeStats in crimeStatsList where crimeStats.year == 2010 select crimeStats.population;
+
+            var murderPerYear = from crimeStats in crimeStatsList select crimeStats.murder; 
+
+            var murder94to97 = from crimeStats in crimeStatsList where crimeStats.year >= 1994 && crimeStats.year <= 1997 select crimeStats.murder;
+
+            var murder10to13 = from crimeStats in crimeStatsList where crimeStats.year >= 2010 && crimeStats.year <= 2013 select crimeStats.murder;
+
+            var theft99to04 = from crimeStats in crimeStatsList where crimeStats.year >= 1999 && crimeStats.year <= 2004 select crimeStats.theft;
+
+            var MVTPerYear = from crimeStats in crimeStatsList select crimeStats.mvt;
+
+            /*
+             * Find necessary values needed to create report
+             */
+
+            int minYear = years.Min();
+            int maxYear = years.Max();
+            int numYears = years.Count();
+            float violent2010PerCapita = violentIn2010.Sum() / popIn2010.First();
+            float avgMurder = murderPerYear.Sum() / numYears;
+            float avgMurder94to97 = murder94to97.Sum() / murder94to97.Count();
+            float avgMurder10to13 = murder10to13.Sum() / murder10to13.Count();
+            int minThefts99to04 = theft99to04.Min();
+            int maxThefts99to04 = theft99to04.Max();
+            int maxMVT = MVTPerYear.Max();
+
+            int[] yrsOver500kArray = yrsRobberyOver500k.Cast<int>().ToArray();
+            int[] numOver500kArray = numRobberyOver500k.Cast<int>().ToArray();
+            
+
+            /*
+             * Create report
+             */
+
+            string report = "Years included in data: " + minYear + " to " + maxYear + Environment.NewLine; ;
+            report += "Number of years in data: " + numYears + Environment.NewLine;
+            report += "Years murder is under 15000: ";
+            foreach (var item in murdersUnder15k) report += item + " ";
+            report += Environment.NewLine + Environment.NewLine;
+            report += "Years where robbery is greater than 500,000: ";
+            for (int i = 0; i < yrsOver500kArray.Length; i++) report += Environment.NewLine + "      Year: " + yrsOver500kArray[i] + " --> Robberies: " + numOver500kArray[i];
+            report += Environment.NewLine + Environment.NewLine;
+            report += "Violent crime per capita in 2010: " + violent2010PerCapita + Environment.NewLine;
+            report += "Average murders per year from " + minYear + " to " + maxYear + ": " + avgMurder + Environment.NewLine;
+            report += "Average murders per year from 1994 to 1997: " + avgMurder94to97 + Environment.NewLine;
+            report += "Average murders per year from 2010 to 2013: " + avgMurder10to13 + Environment.NewLine;
+            report += "Minimum thefts per year from 1999 to 2004: " + minThefts99to04 + Environment.NewLine;
+            report += "Maximum thefts per year from 1999 to 2004: " + maxThefts99to04 + Environment.NewLine;
+            report += "Year with highest number of motor vehicle thefts: " + maxMVT + Environment.NewLine;
+
+
+            return report;
+
         }
 
         
